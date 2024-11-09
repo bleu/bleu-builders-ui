@@ -1,5 +1,5 @@
 {
-  "name": "@bleu/ui",
+  "name": "@bleu.builders/ui",
   "description": "",
   "version": "0.1.133",
   "author": "",
@@ -73,12 +73,8 @@
       "release": true
     },
     "npm": {
-      "publish": true,
-      "publishArgs": "--registry=https://npm.pkg.github.com"
+      "publish": true
     }
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "engines": {
     "node": ">=18.0.0"

@@ -2183,9 +2183,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bleu/ui@workspace:.":
+"@bleu.builders/ui@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@bleu/ui@workspace:."
+  resolution: "@bleu.builders/ui@workspace:."
   dependencies:
     "@commitlint/cli": "npm:19.3.0"
     "@commitlint/config-conventional": "npm:19.2.2"
