@@ -12,13 +12,14 @@ import { Input } from "#/components/ui/Input";
 
 import { withConditional } from "../withConditional";
 import { BaseField } from "../types";
+import { cn } from "#/lib";
 
 export interface InputFieldProps extends BaseField {
   length?: {
     maximum?: number;
     minimum: number; // undefined or number
   };
-  mode: "text" | "number";
+  mode: "text" | "number" | "time";
   type: "input";
 }
 
@@ -56,7 +57,9 @@ export const InputField = withConditional<InputFieldProps>(
         }
         defaultValue={field.defaultValue}
         render={({ field: formField }) => (
-          <FormItem className="w-full">
+          <FormItem
+            className={cn(field.mode === "time" ? "w-[240px]" : "w-full")}
+          >
             <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
             <FormDescription>{field.description}</FormDescription>
             <FormControl>

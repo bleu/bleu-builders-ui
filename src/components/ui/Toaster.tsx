@@ -8,10 +8,13 @@ import {
   ToastViewport,
 } from "#/components/ui/Toast";
 import { useToast } from "#/hooks/useToast";
+import { cn } from "#/lib";
 
 function Toaster({
+  className,
   position = "top-right",
 }: {
+  className?: string;
   position?: "top-right" | "top-left" | "bottom-right" | "bottom-left";
 }) {
   const { toasts } = useToast();
@@ -28,7 +31,7 @@ function Toaster({
           <ToastClose />
         </Toast>
       ))}
-      <ToastViewport position={position} />
+      <ToastViewport className={cn(className)} position={position} />
     </ToastProvider>
   );
 }

@@ -37,7 +37,7 @@ export const DatePickerInput = withConditional<DatePickerInputProps>(
         rules={field.required ? { required: true } : undefined}
         defaultValue={field.defaultValue}
         render={({ field: formField }) => (
-          <FormItem className="flex flex-col">
+          <FormItem className="flex flex-col w-full">
             <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
             <Popover>
               <PopoverTrigger asChild>
@@ -64,7 +64,7 @@ export const DatePickerInput = withConditional<DatePickerInputProps>(
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent className="w-auto p-0 z-[1500]" align="start">
                 {/* @ts-expect-error TS(2739) FIXME: Type '{ mode: string; selected: any; onSelect: any... Remove this comment to see the full error message */}
                 <Calendar
                   mode="single"
