@@ -5,9 +5,9 @@ module.exports = {
   darkMode: ["class"],
   prefix: "",
   // important: "#bleu-ui",
-  content: ["src/**/*.{ts,tsx}"],
+  content: ["src/**/*.{ts,tsx}", "./src/stories/**/*.{js,ts,jsx,tsx,mdx}"],
   corePlugins: {
-    preflight: false,
+    preflight: true,
   },
   theme: {
     container: {

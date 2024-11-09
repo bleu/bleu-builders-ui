@@ -47,3 +47,5 @@ yalc.lock
 .swc/
 
 stats.html
+
+*storybook.log

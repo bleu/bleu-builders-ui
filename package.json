@@ -25,7 +25,9 @@
     "release": "yarn build && yarn release-it",
     "link:self": "yarn yalc publish && yarn link",
     "ts": "node node_modules/.bin/ts-node -r tsconfig-paths/register -O '{\"module\": \"commonjs\", \"moduleResolution\": \"classic\", \"resolveJsonModule\": false }' --transpile-only --project ./tsconfig.json",
-    "i18n:extract": "i18next src/**/*"
+    "i18n:extract": "i18next src/**/*",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "module": "dist/index.mjs",
   "main": "./dist/index.js",
@@ -80,6 +82,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^1.6.1",
     "@commitlint/cli": "19.3.0",
     "@commitlint/config-conventional": "19.2.2",
     "@rollup/plugin-alias": "^5.1.0",
@@ -90,6 +93,17 @@
     "@rollup/plugin-url": "^8.0.2",
     "@ryansonshine/commitizen": "4.2.8",
     "@ryansonshine/cz-conventional-changelog": "3.3.4",
+    "@storybook/addon-essentials": "^8.2.7",
+    "@storybook/addon-interactions": "^8.2.7",
+    "@storybook/addon-links": "^8.2.7",
+    "@storybook/addon-onboarding": "^8.2.7",
+    "@storybook/addon-styling-webpack": "^1.0.0",
+    "@storybook/addon-themes": "^8.2.8",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
+    "@storybook/blocks": "^8.2.7",
+    "@storybook/react": "^8.2.7",
+    "@storybook/react-webpack5": "^8.2.7",
+    "@storybook/test": "^8.2.7",
     "@svgr/rollup": "^8.1.0",
     "@swc/core": "1.6.13",
     "@testing-library/dom": "^10.3.1",
@@ -122,6 +136,7 @@
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-sort-class-members": "^1.20.0",
+    "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-typescript-sort-keys": "3.2.0",
     "eslint-plugin-unused-imports": "4.0.0",
     "globals": "^15.8.0",
@@ -145,6 +160,7 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-swc3": "^0.11.2",
     "rollup-plugin-visualizer": "^5.12.0",
+    "storybook": "^8.2.7",
     "style-loader": "^4.0.0",
     "tailwindcss": "^3.4.4",
     "tailwindcss-animate": "^1.0.7",
@@ -175,7 +191,7 @@
     "trim-newlines": ">=3.0.1",
     "yaml": ">=2.2.2"
   },
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.4.0",
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
