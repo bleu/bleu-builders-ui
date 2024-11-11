@@ -20,6 +20,10 @@ export function DataTableColumnHeader({ column, title, className }) {
     return <div className={cn(className)}>{title}</div>;
   }
 
+  if (column.id === "actions") {
+    return <div className={cn(className)}>{title}</div>;
+  }
+
   return (
     <div className={cn("flex items-center space-x-2", className)}>
       <DropdownMenu>
