@@ -30,7 +30,7 @@ export const MultiSelectCheckboxes =
             </FormLabel>
             <FormDescription>{field.description}</FormDescription>
           </div>
-          <div className="h-20 overflow-y-auto">
+          <div className="h-20 overflow-y-auto multi-select">
             {field.options?.map((item) => (
               <FormField
                 key={item.value}
