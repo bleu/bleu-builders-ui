@@ -16,7 +16,9 @@ export const DataTableRowActions = ({ row, column }) => {
   if (!actions?.length) return null;
 
   const filteredActions = actions.filter(
-    ({ condition_key, condition_value }) => {
+    ({ condition_key, condition_value, hide }) => {
+      if (hide) return false;
+
       if (!condition_key && !condition_value) return true;
 
       return row.original?.[condition_key] === condition_value;
