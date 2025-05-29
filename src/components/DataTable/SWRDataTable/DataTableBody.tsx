@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { TableBody, TableCell, TableRow } from "#/components/ui";
 
 import { useTableContext } from "../TableContext";
+import { cn } from "#/lib/utils";
 
 export function DataTableBody({ hasDetails }) {
   // @ts-expect-error TS(2339) FIXME: Property 'table' does not exist on type '{}'.
@@ -27,7 +28,13 @@ export function DataTableBody({ hasDetails }) {
             }}
           >
             {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
+              <TableCell
+                key={cell.id}
+                className={cn({
+                  "bg-background sticky right-0 group-hover:bg-muted/40 transition-colors":
+                    cell.column.id === "actions",
+                })}
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
