@@ -48,11 +48,16 @@ export interface MultiSelectField extends SelectFieldProps {
 export const MultiSelect = withConditional<MultiSelectField>(
   ({ form, field }) => {
     const [options, setOptions] = React.useState(field.options || []);
-    const selection = form.watch(field.name) || [];
+    const selection = form.watch(field.name) || [""];
 
     const addNewTag = ({ tag }) => {
       setOptions((state) => [...state, { label: tag, value: tag }]);
-      form.setValue(field.name, [...selection, tag]);
+      form.setValue(
+        field.name,
+        selection.length === 1 && selection[0] === ""
+          ? [tag]
+          : [...selection, tag]
+      );
     };
 
     return (
@@ -62,8 +67,10 @@ export const MultiSelect = withConditional<MultiSelectField>(
         rules={field.required ? { required: true } : undefined}
         render={({ field: formField }) => {
           const formFieldValue = Array.isArray(formField.value)
-            ? formField.value
-            : [];
+            ? formField.value.length === 0
+              ? [""]
+              : formField.value
+            : [""];
 
           return (
             <FormItem className="flex min-w-[6rem] flex-col">
@@ -77,7 +84,7 @@ export const MultiSelect = withConditional<MultiSelectField>(
                       className="my-4 border-dashed dark:border-2"
                     >
                       <PlusCircledIcon className="mr-2 size-4" />
-                      {selection?.length > 0 && (
+                      {selection?.length > 0 && selection[0] !== "" && (
                         <>
                           <Separator
                             orientation="vertical"
@@ -132,12 +139,16 @@ export const MultiSelect = withConditional<MultiSelectField>(
                                 const newValue = formFieldValue.filter(
                                   (value) => value !== option.value
                                 );
-                                form.setValue(field.name, newValue);
+                                form.setValue(
+                                  field.name,
+                                  newValue.length === 0 ? [""] : newValue
+                                );
                               } else {
-                                form.setValue(field.name, [
-                                  ...formFieldValue,
-                                  option.value,
-                                ]);
+                                const newValue =
+                                  formFieldValue[0] === ""
+                                    ? [option.value]
+                                    : [...formFieldValue, option.value];
+                                form.setValue(field.name, newValue);
                               }
                             }}
                           >
