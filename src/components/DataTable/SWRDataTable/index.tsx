@@ -19,6 +19,7 @@ import { DataTableHeader } from "./DataTableHeader";
 import { DataTableBody } from "./DataTableBody";
 import { deserializeQuery } from "#/lib/serializeQuery";
 import { formatNumber } from "#/lib";
+import { EditableCell } from "./EditableCell";
 
 export const formatParamsToDataTable = (params, searchKey) => {
   const { columnFilters = {}, pageIndex, pageSize, sorting } = params;
@@ -50,12 +51,44 @@ export const formatParamsToDataTable = (params, searchKey) => {
   return to;
 };
 
-export const renderDataTableCell = ({ filters, column, row, selectedRows }) => {
+export const renderDataTableCell = ({
+  filters,
+  column,
+  row,
+  selectedRows,
+  updateCell,
+  isMutating,
+}) => {
   const value = row.getValue(column.columnDef.accessorKey);
   const { i18n } = useTranslation();
 
+  // get display type
   const displayAs =
     column.columnDef.field_options?.display_type || column.columnDef.type;
+
+  // check if this column is editable
+  const isEditable = column.columnDef.field_options?.editable && updateCell;
+
+  if (isEditable) {
+    const editType =
+      column.columnDef.field_options?.editable_type ||
+      (displayAs === "number"
+        ? "number"
+        : displayAs === "boolean"
+          ? "boolean"
+          : "text");
+
+    return (
+      <EditableCell
+        value={value}
+        row={row}
+        column={column}
+        onUpdate={updateCell}
+        isUpdating={isMutating}
+        type={editType}
+      />
+    );
+  }
 
   switch (displayAs) {
     case "text":
@@ -169,7 +202,13 @@ export const renderDataTableCell = ({ filters, column, row, selectedRows }) => {
 export const defaultDataTableFilterFn = (row, id, filterValue) =>
   row.getValue(id).includes(filterValue);
 
-export const buildDataTableColumns = (columnsConfig, filters, selectedRows) => {
+export const buildDataTableColumns = (
+  columnsConfig,
+  filters,
+  selectedRows,
+  updateCell,
+  isMutating
+) => {
   if (!columnsConfig) return [];
 
   return columnsConfig.map((columnConfig) => ({
@@ -178,24 +217,73 @@ export const buildDataTableColumns = (columnsConfig, filters, selectedRows) => {
       // @ts-expect-error TS(2741) FIXME: Property 'className' is missing in type '{ column:... Remove this comment to see the full error message
       <DataTableColumnHeader column={column} title={columnConfig.title} />
     ),
-    cell: (rest) => renderDataTableCell({ filters, ...rest, selectedRows }),
+    cell: (rest) =>
+      renderDataTableCell({
+        filters,
+        ...rest,
+        selectedRows,
+        updateCell,
+        isMutating,
+      }),
     filterFn: columnConfig.filterable ? defaultDataTableFilterFn : null,
   }));
 };
 
+/**
+ *
+ * @example
+ * // Basic usage with editable cells
+ * const columns = [
+ *   {
+ *     accessorKey: "name",
+ *     title: "Name",
+ *     type: "text",
+ *     editable: true, // makes this column editable
+ *     display_type: "text"
+ *   },
+ *   {
+ *     accessorKey: "age",
+ *     title: "Age",
+ *     type: "number",
+ *     editable: true,
+ *     editable_type: "number"
+ *   },
+ *   {
+ *     accessorKey: "active",
+ *     title: "Active",
+ *     type: "boolean",
+ *     editable: true,
+ *   }
+ * ];
+ *
+ * <SWRDataTable
+ *   fetchPath="/api/users"
+ *   mutationPath="/api/users/update/:RESOURCE_ID" // Required for editing functionality
+ *   columnsConfig={columns}
+ * />
+ *
+ * // The mutation endpoint should expect PUT requests with this structure:
+ * // { id: string, field: string, value: any }
+ */
 export function SWRDataTable({
   fetchPath,
+  mutationPath,
   searchKey = undefined,
   defaultParams = {},
   hasDetails = false,
   action,
   setSelectedData,
   selectedRows,
+  dataFetcher,
+  dataMutator,
 }: {
   action?: React.ReactNode;
+  dataFetcher?: (args: any) => Promise<any>;
+  dataMutator?: (args: any) => Promise<any>;
   defaultParams?: Record<string, unknown>;
   fetchPath: string;
   hasDetails?: boolean;
+  mutationPath?: string;
   searchKey?: string;
   selectedRows?: any[];
   setSelectedData?: (data: any[]) => void;
@@ -209,13 +297,24 @@ export function SWRDataTable({
     ...defaultParams,
   };
 
-  const { data, error, tableState, setTableState } = useSWRDataTable(
-    fetchPath,
-    initialSearch
-  );
+  const { data, error, tableState, setTableState, updateCell, isMutating } =
+    useSWRDataTable(
+      fetchPath,
+      initialSearch,
+      {},
+      mutationPath || null,
+      dataFetcher,
+      dataMutator
+    );
 
   const buildColumns = (tableColumns, tableFilters) =>
-    buildDataTableColumns(tableColumns, tableFilters, selectedRows);
+    buildDataTableColumns(
+      tableColumns,
+      tableFilters,
+      selectedRows,
+      updateCell,
+      isMutating
+    );
 
   if (error) {
     return (
@@ -255,4 +354,4 @@ export function SWRDataTable({
   );
 }
 
-export { DataTableHeader, DataTableBody };
+export { DataTableBody, DataTableHeader, EditableCell };

@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 import { useTableState } from "./useTableState";
 import { constructFullUrlWithParams } from "#/lib/constructFullUrlWithParams";
 
@@ -39,10 +40,39 @@ const dataTableFetcher = async ([pathOrUrl, paramsObject]) => {
   return response.json();
 };
 
-export function useSWRDataTable(path, initialSearch = {}, options = {}) {
+const dataTableMutator = async (url, { arg }) => {
+  const { id, field, value } = arg;
+
+  const response = await fetch(url.replace(":RESOURCE_ID", id), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      id,
+      [field]: value,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new FetchError("Failed to update", response);
+  }
+
+  return response.json();
+};
+
+export function useSWRDataTable(
+  path,
+  initialSearch = {},
+  options = {},
+  mutationPath: string | null = null,
+  dataFetcher: typeof dataTableFetcher = dataTableFetcher,
+  dataMutator: typeof dataTableMutator = dataTableMutator
+) {
   const { tableState, setTableState } = useTableState(initialSearch);
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     [
       path,
       {
@@ -53,8 +83,19 @@ export function useSWRDataTable(path, initialSearch = {}, options = {}) {
         grouping: tableState.grouping,
       },
     ],
-    dataTableFetcher,
+    dataFetcher,
     { keepPreviousData: true, ...options }
+  );
+
+  const mutation = useSWRMutation(
+    mutationPath || "__no_mutation__",
+    mutationPath ? dataMutator : () => Promise.resolve(),
+    {
+      onSuccess: () => {
+        // revalidate the main data after successful mutation
+        mutate();
+      },
+    }
   );
 
   return {
@@ -63,5 +104,7 @@ export function useSWRDataTable(path, initialSearch = {}, options = {}) {
     isLoading,
     tableState,
     setTableState,
+    updateCell: mutationPath ? mutation.trigger : null,
+    isMutating: mutationPath ? mutation.isMutating : false,
   };
 }
