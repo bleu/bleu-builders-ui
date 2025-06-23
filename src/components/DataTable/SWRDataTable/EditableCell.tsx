@@ -1,10 +1,10 @@
 // biome-ignore lint/style/useImportType: <explanation>
 import React, { useState, useRef, useEffect } from "react";
 import { CheckIcon, Cross2Icon, Pencil1Icon } from "@radix-ui/react-icons";
-import { Checkbox } from "@radix-ui/react-checkbox";
 import { Input } from "#/components/ui/Input";
 import { Button } from "#/components/ui/Button";
 import { cn } from "#/lib/utils";
+import { Checkbox } from "#/components/ui/Checkbox";
 
 interface EditableCellProps {
   column: any;

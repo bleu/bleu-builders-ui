@@ -12,7 +12,7 @@ export function DataTableDemo({ data }) {
   const { tableState, setTableState } = useTableState();
 
   const buildColumns = (tableColumns, tableFilters) =>
-    buildDataTableColumns(tableColumns, tableFilters, []);
+    buildDataTableColumns(tableColumns, tableFilters, [], null, null);
 
   return (
     <div className="border-2 rounded-lg">
