@@ -29,7 +29,6 @@ export interface DatePickerInputProps extends BaseField {
 export const DatePickerInput = withConditional<DatePickerInputProps>(
   ({ form, field }) => {
     const isDatetime = field.type === "datetime";
-
     return (
       <FormField
         control={form.control}
@@ -64,7 +63,13 @@ export const DatePickerInput = withConditional<DatePickerInputProps>(
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 z-[1500]" align="start">
+              <PopoverContent
+                className="w-auto p-0 z-[1500]"
+                align="start"
+                side="bottom"
+                sideOffset={4}
+                avoidCollisions={false}
+              >
                 {/* @ts-expect-error TS(2739) FIXME: Type '{ mode: string; selected: any; onSelect: any... Remove this comment to see the full error message */}
                 <Calendar
                   mode="single"
