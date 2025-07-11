@@ -64,13 +64,14 @@ const dataTableMutator = async (url, { arg }) => {
 
 export function useSWRDataTable(
   path,
+  tableId?: string,
   initialSearch = {},
   options = {},
   mutationPath: string | null = null,
   dataFetcher: typeof dataTableFetcher = dataTableFetcher,
   dataMutator: typeof dataTableMutator = dataTableMutator
 ) {
-  const { tableState, setTableState } = useTableState(initialSearch);
+  const { tableState, setTableState } = useTableState(tableId, initialSearch);
 
   const { data, error, isLoading, mutate } = useSWR(
     [

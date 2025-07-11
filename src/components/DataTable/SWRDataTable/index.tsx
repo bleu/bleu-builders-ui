@@ -276,6 +276,7 @@ export function SWRDataTable({
   selectedRows,
   dataFetcher,
   dataMutator,
+  tableId,
 }: {
   action?: React.ReactNode;
   dataFetcher?: (args: any) => Promise<any>;
@@ -287,6 +288,7 @@ export function SWRDataTable({
   searchKey?: string;
   selectedRows?: any[];
   setSelectedData?: (data: any[]) => void;
+  tableId?: string;
 }) {
   const [searchParams] = useSearchParams();
   const initialSearch = {
@@ -300,6 +302,7 @@ export function SWRDataTable({
   const { data, error, tableState, setTableState, updateCell, isMutating } =
     useSWRDataTable(
       fetchPath,
+      tableId,
       initialSearch,
       {},
       mutationPath || null,
@@ -339,6 +342,7 @@ export function SWRDataTable({
       buildTableColumns={buildColumns}
       setSelectedData={setSelectedData}
       setQueryToParams
+      tableId={tableId}
     >
       <div className="space-y-4">
         <DataTableToolbar action={action} />

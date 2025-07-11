@@ -1,7 +1,9 @@
 import { TableOptions } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { usePersistentFilters } from "./usePersistentFilters";
 
 export function useTableState(
+  tableId?: string,
   initialState: TableOptions<unknown[]>["state"] = {}
 ) {
   const [pagination, setPagination] = useState(
@@ -13,13 +15,34 @@ export function useTableState(
   const [columnVisibility, setColumnVisibility] = useState(
     initialState.columnVisibility || {}
   );
-  const [columnFilters, setColumnFilters] = useState(
-    initialState.columnFilters || []
-  );
+  const { persistedFilters, saveFilters, clearPersistedFilters } =
+    usePersistentFilters(tableId || "");
+
+  const [columnFilters, setColumnFilters] = useState(() => {
+    if (
+      tableId &&
+      (!initialState.columnFilters || initialState.columnFilters.length === 0)
+    ) {
+      return persistedFilters;
+    }
+    return initialState.columnFilters || [];
+  });
   const [sorting, setSorting] = useState(initialState.sorting || []);
 
   const [grouping, setGrouping] = useState(initialState.grouping || []);
   const [expanded, setExpanded] = useState(initialState.expanded || false);
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (tableId && isInitialized) {
+      saveFilters(columnFilters);
+    }
+  }, [columnFilters, tableId, saveFilters, isInitialized]);
+
+  useEffect(() => {
+    setIsInitialized(true);
+  }, []);
 
   const state = useMemo(
     () => ({
@@ -51,6 +74,7 @@ export function useTableState(
       setSorting,
       setGrouping,
       setExpanded,
+      clearPersistedFilters,
     }),
     [
       setPagination,
@@ -60,6 +84,7 @@ export function useTableState(
       setSorting,
       setGrouping,
       setExpanded,
+      clearPersistedFilters,
     ]
   );
 

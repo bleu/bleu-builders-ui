@@ -9,7 +9,7 @@ import { useTableContext } from "./TableContext";
 
 export function DataTableFilters() {
   // @ts-expect-error TS(2339) FIXME: Property 'table' does not exist on type '{}'.
-  const { table, filters } = useTableContext();
+  const { table, filters, setTableState, tableId } = useTableContext();
 
   if (!table || !filters) {
     return null;
@@ -19,24 +19,32 @@ export function DataTableFilters() {
     table.getState().columnFilters.filter((filter) => filter.value.length > 0)
       .length > 0;
 
-  const initialFilterSet = useRef(false);
+  const effectiveTableId = tableId || "default";
+  const initialFilterSet = useRef(new Map<string, boolean>());
 
   useEffect(() => {
-    if (filters && !initialFilterSet.current) {
+    if (filters && !initialFilterSet.current.get(effectiveTableId)) {
       filters.map((filter) => {
         const column = table.getColumn(filter.value);
         if (column) {
-          column.setFilterValue(
-            filter.options
-              .filter((option) => option.defaultSelected)
-              .map((option) => option.value)
-          );
+          const currentFilterValue = column.getFilterValue();
+          if (
+            !currentFilterValue ||
+            (Array.isArray(currentFilterValue) &&
+              currentFilterValue.length === 0)
+          ) {
+            column.setFilterValue(
+              filter.options
+                .filter((option) => option.defaultSelected)
+                .map((option) => option.value)
+            );
+          }
         }
         return null;
       });
-      initialFilterSet.current = true;
+      initialFilterSet.current.set(effectiveTableId, true);
     }
-  }, [filters, table]);
+  }, [filters, table, effectiveTableId]);
 
   return (
     <div className="flex flex-1 items-start space-x-2">
@@ -56,7 +64,12 @@ export function DataTableFilters() {
       {isFiltered && (
         <Button
           variant="ghost"
-          onClick={() => table.resetColumnFilters()}
+          onClick={() => {
+            table.resetColumnFilters();
+            if (setTableState?.clearPersistedFilters) {
+              setTableState.clearPersistedFilters();
+            }
+          }}
           className="h-8 px-2 lg:px-3"
         >
           <Trans>Reset</Trans>
