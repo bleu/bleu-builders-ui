@@ -37,18 +37,31 @@ const buildColumns = (columnsConfig) => {
   }));
 };
 
+interface DataTableProps {
+  buildTableColumns?: (columnsConfig: any) => any;
+  children: any;
+  data: any;
+  error: any;
+  isLoading?: boolean;
+  setQueryToParams: any;
+  setSelectedData: any;
+  setTableState: any;
+  tableId?: any;
+  tableState: any;
+}
+
 export function DataTable({
   children,
   data,
   error,
   tableState,
   setTableState,
-  buildTableColumns = buildColumns,
   setQueryToParams,
   setSelectedData,
+  buildTableColumns = buildColumns,
   isLoading = false,
-  tableId = null,
-}) {
+  tableId,
+}: DataTableProps) {
   const {
     pagination,
     rowSelection,
