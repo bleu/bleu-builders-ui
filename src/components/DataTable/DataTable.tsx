@@ -47,6 +47,7 @@ export function DataTable({
   setQueryToParams,
   setSelectedData,
   isLoading = false,
+  tableId,
 }) {
   const {
     pagination,
@@ -160,6 +161,7 @@ export function DataTable({
       table,
       searchKey,
       isLoading,
+      tableId,
     }),
     [
       data,
@@ -170,6 +172,7 @@ export function DataTable({
       table,
       searchKey,
       isLoading,
+      tableId,
     ]
   );
 
