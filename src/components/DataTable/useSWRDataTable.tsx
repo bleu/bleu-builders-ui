@@ -62,14 +62,15 @@ const dataTableMutator = async (url, { arg }) => {
   return response.json();
 };
 
+/* eslint-disable default-param-last */
 export function useSWRDataTable(
   path,
-  tableId?: string,
   initialSearch = {},
   options = {},
   mutationPath: string | null = null,
   dataFetcher: typeof dataTableFetcher = dataTableFetcher,
-  dataMutator: typeof dataTableMutator = dataTableMutator
+  dataMutator: typeof dataTableMutator = dataTableMutator,
+  tableId?: string
 ) {
   const { tableState, setTableState } = useTableState(tableId, initialSearch);
 
@@ -109,3 +110,4 @@ export function useSWRDataTable(
     isMutating: mutationPath ? mutation.isMutating : false,
   };
 }
+/* eslint-enable default-param-last */

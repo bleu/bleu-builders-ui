@@ -302,12 +302,12 @@ export function SWRDataTable({
   const { data, error, tableState, setTableState, updateCell, isMutating } =
     useSWRDataTable(
       fetchPath,
-      tableId,
       initialSearch,
       {},
       mutationPath || null,
       dataFetcher,
-      dataMutator
+      dataMutator,
+      tableId
     );
 
   const buildColumns = (tableColumns, tableFilters) =>
