@@ -47,7 +47,7 @@ export function DataTable({
   setQueryToParams,
   setSelectedData,
   isLoading = false,
-  tableId,
+  tableId = null,
 }) {
   const {
     pagination,
