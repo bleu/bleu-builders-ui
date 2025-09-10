@@ -8,7 +8,7 @@ import { TableBody, TableCell, TableRow } from "#/components/ui";
 
 import { useTableContext } from "../TableContext";
 
-export function DataTableBody({ hasDetails }) {
+export function DataTableBody({ hasDetails, isLoading = false }) {
   // @ts-expect-error TS(2339) FIXME: Property 'table' does not exist on type '{}'.
   const { table } = useTableContext();
 
@@ -33,6 +33,12 @@ export function DataTableBody({ hasDetails }) {
             ))}
           </TableRow>
         ))
+      ) : isLoading ? (
+        <TableRow>
+          <TableCell className="h-24 text-center animate-pulse">
+            <Trans>Loading</Trans>
+          </TableCell>
+        </TableRow>
       ) : (
         <TableRow>
           <TableCell className="h-24 text-center">
