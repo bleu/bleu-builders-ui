@@ -299,16 +299,23 @@ export function SWRDataTable({
     ...defaultParams,
   };
 
-  const { data, error, tableState, setTableState, updateCell, isMutating } =
-    useSWRDataTable(
-      fetchPath,
-      initialSearch,
-      {},
-      mutationPath || null,
-      dataFetcher,
-      dataMutator,
-      tableId
-    );
+  const {
+    data,
+    error,
+    tableState,
+    setTableState,
+    updateCell,
+    isMutating,
+    isLoading,
+  } = useSWRDataTable(
+    fetchPath,
+    initialSearch,
+    {},
+    mutationPath || null,
+    dataFetcher,
+    dataMutator,
+    tableId
+  );
 
   const buildColumns = (tableColumns, tableFilters) =>
     buildDataTableColumns(
@@ -349,7 +356,7 @@ export function SWRDataTable({
         <div className="rounded-md border dark:border-2">
           <Table>
             <DataTableHeader />
-            <DataTableBody hasDetails={hasDetails} />
+            <DataTableBody hasDetails={hasDetails} isLoading={isLoading} />
           </Table>
         </div>
         <DataTablePagination />
