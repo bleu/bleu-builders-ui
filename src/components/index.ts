@@ -11,3 +11,4 @@ export * from "./OtpInput";
 export * from "./SubmitButton";
 export * from "./StrictModeDroppable";
 export * from "./Skeletons";
+export { default as JoditEditor } from "./RichTextEditor/JoditEditor";

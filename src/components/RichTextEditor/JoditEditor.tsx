@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import "jodit/es5/jodit.min.css";
+import "./styles.css";
 import { Jodit } from "jodit/es2018/jodit.fat.min";
 
 const { isFunction } = Jodit.modules.Helpers;
@@ -36,6 +37,7 @@ interface JoditEditorProps {
   onChange?: (newValue: string) => void;
   tabIndex?: number;
   value: string;
+  isUploading?: boolean;
 }
 
 const JoditEditorBase = forwardRef<HTMLTextAreaElement, JoditEditorProps>(
@@ -50,6 +52,7 @@ const JoditEditorBase = forwardRef<HTMLTextAreaElement, JoditEditorProps>(
       tabIndex,
       value,
       editorRef,
+      isUploading = false,
     },
     ref
   ) => {
@@ -147,6 +150,11 @@ const JoditEditorBase = forwardRef<HTMLTextAreaElement, JoditEditorProps>(
     return (
       <div className="jodit-react-container">
         <textarea defaultValue={value} name={name} id={id} ref={textArea} />
+        {isUploading && (
+          <div className="jodit-loading-overlay">
+            <div className="jodit-loading-spinner" />
+          </div>
+        )}
       </div>
     );
   }
