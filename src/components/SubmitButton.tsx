@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigation } from "react-router-dom";
+import { useNavigation } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Button, ButtonProps } from "./ui/Button";
 

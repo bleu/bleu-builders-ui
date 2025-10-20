@@ -1,6 +1,6 @@
 import { CircleIcon, FileIcon } from "@radix-ui/react-icons";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Trans, useTranslation } from "react-i18next";
 import useSWR from "swr";
 import { useState, useEffect } from "react";
