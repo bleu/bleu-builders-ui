@@ -15,6 +15,22 @@ export interface SwitchFieldProps extends BaseField {
   type: "switch";
 }
 
+function transformIntoBoolean(value: any): boolean {
+  if (typeof value === "boolean") {
+    return value;
+  }
+
+  if (typeof value === "string") {
+    return value === "true";
+  }
+
+  if (typeof value === "number") {
+    return value === 1;
+  }
+
+  return false;
+}
+
 export const SwitchField = withConditional<SwitchFieldProps>(
   ({ form, field }) => {
     const disabled =
@@ -40,7 +56,7 @@ export const SwitchField = withConditional<SwitchFieldProps>(
             <FormControl>
               <Switch
                 disabled={disabled || false}
-                checked={formField.value}
+                checked={transformIntoBoolean(formField.value)}
                 onCheckedChange={formField.onChange}
               />
             </FormControl>
