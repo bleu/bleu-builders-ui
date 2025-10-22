@@ -3,7 +3,7 @@ import React from "react";
 import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 
 import { Trans, useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router";
 import { Badge, Checkbox, Table } from "#/components/ui";
 import { SectionTitle } from "#/components/SectionTitle";
 import { formatDate, formatDateTime } from "#/lib/formatDate";
