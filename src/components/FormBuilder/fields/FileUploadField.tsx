@@ -122,7 +122,9 @@ export const FileUploadField = withConditional<FileUploadFieldProps>(
         rules={field.required ? { required: true } : undefined}
         render={({ field: formField }) => (
           <FormItem className="w-full">
-            <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
+            <FormLabel tooltip={field.tooltip} required={field.required}>
+              {field.label}
+            </FormLabel>
             <FormDescription>{field.description}</FormDescription>
             <FormControl>
               <div className="flex flex-col gap-0 items-start">
