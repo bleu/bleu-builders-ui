@@ -40,4 +40,5 @@ export interface LayoutedFormBuilderProps {
   headerComponent?: ReactNode;
   icons?: { [key: string]: ReactNode };
   index?: number;
+  innerLayoutClassName?: string;
 }

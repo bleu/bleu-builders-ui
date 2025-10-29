@@ -29,12 +29,14 @@ function FormGroupComponent({
   customComponents = {},
   icons,
   headerComponent = <div />,
+  innerLayoutClassName = "",
 }: {
   customComponents?: { [key: string]: FieldComponentType };
   form: LayoutedFormBuilderProps["form"];
   group: FormGroup;
   headerComponent: React.ReactNode;
   icons: { [key: string]: React.ReactNode };
+  innerLayoutClassName?: string;
 }) {
   const [isFolded, setIsFolded] = useState(false);
   const { layout, fields, title, description } = group;
@@ -198,9 +200,15 @@ function FormGroupComponent({
 
       {/* Render positioned fields in grid */}
       <div
-        className={cn("grid my-4 px-4", gridCols, gapClasses[layout.gap], {
-          hidden: layout.collapsible && isFolded,
-        })}
+        className={cn(
+          "grid my-4",
+          gridCols,
+          gapClasses[layout.gap],
+          {
+            hidden: layout.collapsible && isFolded,
+          },
+          innerLayoutClassName
+        )}
       >
         {gridMap.map((row, rowIndex) => {
           if (!row) return null;
@@ -227,6 +235,7 @@ function FormGroupComponent({
 export function LayoutedFormBuilder({
   groups,
   form,
+  innerLayoutClassName = "",
   customComponents = {},
   index = 0,
   headerComponent = <div />,
@@ -246,6 +255,7 @@ export function LayoutedFormBuilder({
         return (
           <FormGroupComponent
             key={group.group}
+            innerLayoutClassName={innerLayoutClassName}
             headerComponent={headerComponent}
             group={group}
             form={form}
