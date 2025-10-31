@@ -37,7 +37,7 @@ export interface BaseField {
   required?: boolean;
   tooltip?: string;
   type: string;
-  value: string;
+  value?: string;
 }
 export type FormFieldProps =
   | InputFieldProps

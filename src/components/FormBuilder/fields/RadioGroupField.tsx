@@ -51,7 +51,9 @@ const RadioGroupWithoutSection = ({ form, field }) => (
     rules={field.required ? { required: true } : {}}
     render={({ field: rcfField }) => (
       <FormItem className="space-y-0 w-full">
-        <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
+        <FormLabel tooltip={field.tooltip} required={field.required}>
+          {field.label}
+        </FormLabel>
         <FormDescription>{field.description}</FormDescription>
         <FormControl>
           <RadioGroup
@@ -97,7 +99,9 @@ export const RadioGroupField = withConditional<RadioGroupFieldProps>(
         rules={field.required ? { required: true } : undefined}
         render={({ field: formField }) => (
           <FormItem className="space-y-0">
-            <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
+            <FormLabel tooltip={field.tooltip} required={field.required}>
+              {field.label}
+            </FormLabel>
             <FormDescription>{field.description}</FormDescription>
             <FormControl>
               <RadioGroup

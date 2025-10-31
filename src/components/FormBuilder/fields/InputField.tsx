@@ -25,7 +25,13 @@ export interface InputFieldProps extends BaseField {
 
 export const InputField = withConditional<InputFieldProps>(
   ({ form, field }) => {
-    const validator = field.mode === "number" ? z.coerce.number() : z.string();
+    const validator =
+      field.mode === "number"
+        ? z.coerce
+            .number()
+            .min(field.length?.minimum || -Infinity)
+            .max(field.length?.maximum || Infinity)
+        : z.string();
 
     validator
       .min(field.length?.minimum || 0)
@@ -60,7 +66,9 @@ export const InputField = withConditional<InputFieldProps>(
           <FormItem
             className={cn(field.mode === "time" ? "w-[240px]" : "w-full")}
           >
-            <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
+            <FormLabel tooltip={field.tooltip} required={field.required}>
+              {field.label}
+            </FormLabel>
             <FormDescription>{field.description}</FormDescription>
             <FormControl>
               <Input

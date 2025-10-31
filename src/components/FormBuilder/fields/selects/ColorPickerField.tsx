@@ -83,7 +83,9 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
           defaultValue={color}
           render={({ field: formField }) => (
             <FormItem className="grid grid-flow-row auto-rows-min content-end w-full">
-              <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
+              <FormLabel tooltip={field.tooltip} required={field.required}>
+                {field.label}
+              </FormLabel>
               <FormDescription>{field.description}</FormDescription>
               <div
                 className={cn(

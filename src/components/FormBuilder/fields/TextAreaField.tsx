@@ -15,6 +15,7 @@ import { BaseField } from "../types";
 import isFieldDisabled from "../isFieldDisabled";
 
 export interface TextAreaFieldProps extends BaseField {
+  defaultValue?: string;
   length?: {
     maximum?: number;
     minimum: number; // undefined or number
@@ -33,6 +34,7 @@ export const TextAreaField = withConditional<TextAreaFieldProps>(
       <FormField
         control={form.control}
         name={field.name}
+        defaultValue={field.defaultValue}
         rules={
           field.required
             ? {
@@ -45,7 +47,9 @@ export const TextAreaField = withConditional<TextAreaFieldProps>(
         }
         render={({ field: formField }) => (
           <FormItem className="w-full">
-            <FormLabel tooltip={field.tooltip}>{field.label}</FormLabel>
+            <FormLabel tooltip={field.tooltip} required={field.required}>
+              {field.label}
+            </FormLabel>
             <FormDescription>{field.description}</FormDescription>
             <FormControl>
               <Textarea

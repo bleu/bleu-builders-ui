@@ -209,20 +209,22 @@ const useFormField = () => {
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
+    required?: boolean;
     tooltip?: string;
   }
->(({ className, tooltip, ...props }, ref) => {
+>(({ className, required, tooltip, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
     <Tooltip content={tooltip}>
-      <div className="flex items-center gap-x-2">
+      <div className="flex items-center gap-x-2 h-3">
         <Label
           ref={ref}
           className={cn(error && "text-destructive", className)}
           htmlFor={formItemId}
           {...props}
         />
+        {required && <span className="text-red-500 text-sm">*</span>}
         {tooltip && <InfoCircledIcon />}
       </div>
     </Tooltip>
@@ -263,7 +265,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-muted-foreground text-sm mt-0", className)}
       {...props}
     />
   );
