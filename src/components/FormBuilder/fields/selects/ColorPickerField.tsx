@@ -57,9 +57,6 @@ const colorPickerVariants = cva("w-full", {
 
 export const ColorPickerField = withConditional<ColorPickerFieldProps>(
   ({ form, field }) => {
-    const [color, setColor] = React.useState(
-      form.watch(field.name) || undefined
-    );
     const [contentColor, setContentColor] = React.useState("");
 
     useEffect(() => {
@@ -71,7 +68,6 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
     }, [form.watch(field.name)]);
 
     const handleColorChange = (content) => {
-      setColor(content);
       form.setValue(field.name, content);
     };
 
@@ -80,7 +76,7 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
         <FormField
           control={form.control}
           name={field.name}
-          defaultValue={color}
+          defaultValue={form.watch(field.name)}
           render={({ field: formField }) => (
             <FormItem className="grid grid-flow-row auto-rows-min content-end w-full">
               <FormLabel tooltip={field.tooltip} required={field.required}>
@@ -93,7 +89,7 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
                   colorPickerVariants(field.style)
                 )}
               >
-                {color && <span className="ml-3">#</span>}
+                {formField.value && <span className="ml-3">#</span>}
                 <input
                   type="text"
                   className="p-2 mx-0 flex-1 border-0 border-transparent bg-transparent file:border-0 file:bg-transparent file:text-sm file:font-medium focus:border-transparent focus:ring-0"
@@ -102,7 +98,7 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
                   }
                   placeholder="Choose a color"
                   onChange={(e) => handleColorChange(`#${e.target.value}`)}
-                  value={color ? color.slice(1) : undefined}
+                  value={formField.value?.slice(1)}
                 />
                 <Popover>
                   <PopoverTrigger asChild>
