@@ -121,40 +121,25 @@ export const TaggablePopover = ({
           <Button
             variant="outline"
             size="sm"
-            className="my-4 h-8 border-dashed dark:border-2"
+            className="my-4 h-auto min-h-8 border-dashed dark:border-2"
           >
-            <PlusCircledIcon className="mr-2 h-4 w-4" />
+            <PlusCircledIcon className="mr-2 h-4 w-4 shrink-0" />
             Tags
             {selectedTags?.length > 0 && (
               <>
                 <Separator orientation="vertical" className="mx-2 h-4" />
-                <Badge
-                  color="secondary"
-                  className="rounded-sm px-1 font-normal lg:hidden"
-                >
-                  {selectedTags.length}
-                </Badge>
-                <div className="hidden space-x-1 lg:flex">
-                  {selectedTags.length > 2 ? (
-                    <Badge
-                      color="secondary"
-                      className="rounded-sm px-1 font-normal"
-                    >
-                      {selectedTags.length} tags
-                    </Badge>
-                  ) : (
-                    tags
-                      .filter((option) => selectedTags.includes(option.value))
-                      .map((option) => (
-                        <Badge
-                          color="secondary"
-                          key={option.value}
-                          className="rounded-sm px-1 font-normal"
-                        >
-                          {option.label}
-                        </Badge>
-                      ))
-                  )}
+                <div className="flex max-w-xs flex-wrap gap-1 py-4">
+                  {tags
+                    .filter((option) => selectedTags.includes(option.value))
+                    .map((option) => (
+                      <Badge
+                        color="secondary"
+                        key={option.value}
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {option.label}
+                      </Badge>
+                    ))}
                 </div>
               </>
             )}
