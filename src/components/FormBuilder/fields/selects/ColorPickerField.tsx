@@ -89,7 +89,9 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
                   colorPickerVariants(field.style)
                 )}
               >
-                {formField.value && <span className="ml-3">#</span>}
+                <span className={cn("ml-3", !formField.value && "invisible")}>
+                  #
+                </span>
                 <input
                   type="text"
                   className="p-2 mx-0 flex-1 border-0 border-transparent bg-transparent file:border-0 file:bg-transparent file:text-sm file:font-medium focus:border-transparent focus:ring-0"
@@ -103,7 +105,7 @@ export const ColorPickerField = withConditional<ColorPickerFieldProps>(
                 <Popover>
                   <PopoverTrigger asChild>
                     <div
-                      className="mr-2 size-7 rounded-full border shadow-lg"
+                      className="mr-2 h-7 w-7 shrink-0 rounded-full border shadow-lg"
                       style={{ background: formField.value ?? "#aabbcc" }}
                     />
                   </PopoverTrigger>
