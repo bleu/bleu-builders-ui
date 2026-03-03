@@ -29,27 +29,43 @@ const TimePicker = ({ value, setValue, className = "" }) => (
   </div>
 );
 
+const formatDateForInput = (date) => {
+  if (!date) return "";
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const DateInput = ({ value, onChange, className = "" }) => {
-  const formatDateForInput = (date) => {
-    if (!date) return "";
-    const d = new Date(date);
-    // Use local date to avoid timezone issues
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
+  const [inputValue, setInputValue] = React.useState(() =>
+    formatDateForInput(value)
+  );
+  const isFocused = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!isFocused.current) {
+      setInputValue(formatDateForInput(value));
+    }
+  }, [value]);
 
   const handleDateChange = (e) => {
     const dateString = e.target.value;
+    setInputValue(dateString);
+
     if (!dateString) {
       onChange(undefined);
       return;
     }
 
-    // Parse the date string manually to avoid timezone issues
     const [year, month, day] = dateString.split("-").map(Number);
-    const newDate = new Date(year, month - 1, day); // month is 0-indexed
+
+    // Browser sends intermediate values like 0002, 0020, 0202 while the user
+    // is still typing a full year — skip propagating until year is complete.
+    if (year < 1000) return;
+
+    const newDate = new Date(year, month - 1, day);
 
     if (!Number.isNaN(newDate.getTime())) {
       onChange(newDate);
@@ -63,8 +79,15 @@ const DateInput = ({ value, onChange, className = "" }) => {
         <input
           id="date-input"
           type="date"
-          value={formatDateForInput(value)}
+          value={inputValue}
           onChange={handleDateChange}
+          onFocus={() => {
+            isFocused.current = true;
+          }}
+          onBlur={() => {
+            isFocused.current = false;
+            setInputValue(formatDateForInput(value));
+          }}
           className={cn(
             buttonVariants({ variant: "outline" }),
             "form-input text-sm font-medium transition duration-200 ease-in-out",
