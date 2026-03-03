@@ -134,6 +134,10 @@ function Calendar({
   onSelect: setSelected,
   ...props
 }) {
+  const [month, setMonth] = React.useState<Date>(
+    selected ? new Date(selected) : new Date()
+  );
+
   const [timeValue, setTimeValue] = React.useState<string>(
     selected
       ? `${new Date(selected)
@@ -199,6 +203,8 @@ function Calendar({
       return;
     }
 
+    setMonth(date);
+
     if (!withTime) {
       setSelected(date);
       return;
@@ -246,12 +252,16 @@ function Calendar({
     ) : null;
   }, [withDateInput, withTime, selected, timeValue]);
 
+  const selectedDate = selected ? new Date(selected) : undefined;
+
   return (
     <div>
       <DayPicker
         mode="single"
         showOutsideDays={showOutsideDays}
-        selected={selected}
+        selected={selectedDate}
+        month={month}
+        onMonthChange={setMonth}
         onSelect={handleDaySelect}
         captionLayout={captionLayout}
         fromYear={fromYear}
