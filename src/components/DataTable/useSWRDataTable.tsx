@@ -106,6 +106,7 @@ export function useSWRDataTable(
     isLoading,
     tableState,
     setTableState,
+    mutate,
     updateCell: mutationPath ? mutation.trigger : null,
     isMutating: mutationPath ? mutation.isMutating : false,
   };
