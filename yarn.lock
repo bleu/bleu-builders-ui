@@ -3466,6 +3466,7 @@ __metadata:
     jodit: "npm:^4.2.27"
     jsdom: "npm:^24.1.0"
     lint-staged: "npm:15.2.7"
+    lodash: "npm:4.17.21"
     object-to-formdata: "npm:^4.5.1"
     plotly.js: "npm:^2.33.0"
     postcss: "npm:^8.4.39"
