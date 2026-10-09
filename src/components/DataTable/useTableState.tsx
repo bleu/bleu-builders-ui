@@ -1,5 +1,10 @@
-import { TableOptions } from "@tanstack/react-table";
-import { useMemo, useState, useEffect } from "react";
+import {
+  ColumnFiltersState,
+  TableOptions,
+  Updater,
+} from "@tanstack/react-table";
+import { useCallback, useMemo, useState, useEffect, useRef } from "react";
+import { isEqual } from "lodash";
 import { usePersistentFilters } from "./usePersistentFilters";
 
 export function useTableState(
@@ -18,7 +23,7 @@ export function useTableState(
   const { persistedFilters, saveFilters, clearPersistedFilters } =
     usePersistentFilters(tableId || "");
 
-  const [columnFilters, setColumnFilters] = useState(() => {
+  const [columnFilters, setColumnFiltersState] = useState(() => {
     if (
       tableId &&
       (!initialState.columnFilters || initialState.columnFilters.length === 0)
@@ -27,6 +32,22 @@ export function useTableState(
     }
     return initialState.columnFilters || [];
   });
+  const columnFiltersRef = useRef(columnFilters);
+  const setColumnFilters = useCallback(
+    (updater: Updater<ColumnFiltersState>) => {
+      const previousFilters = columnFiltersRef.current;
+      const nextFilters =
+        typeof updater === "function" ? updater(previousFilters) : updater;
+      if (isEqual(nextFilters, previousFilters)) return;
+
+      columnFiltersRef.current = nextFilters;
+      setColumnFiltersState(nextFilters);
+      setPagination((previous) =>
+        previous.pageIndex === 0 ? previous : { ...previous, pageIndex: 0 }
+      );
+    },
+    []
+  );
   const [sorting, setSorting] = useState(initialState.sorting || []);
 
   const [grouping, setGrouping] = useState(initialState.grouping || []);
